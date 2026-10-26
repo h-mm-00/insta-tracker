@@ -26,7 +26,11 @@ ACCOUNTS = {
 def normalize_text(text):
     if not text:
         return ""
-    return unicodedata.normalize('NFKD', text).lower()
+    # 1. 특수 영문/기호를 일반 텍스트로 분해 (NFKD)
+    decomposed = unicodedata.normalize('NFKD', text)
+    # 2. 쪼개진 한글 자모를 다시 정상적인 완성형 한글로 결합 (NFC)
+    composed = unicodedata.normalize('NFC', decomposed)
+    return composed.lower()
 
 def classify_series(acct_code, full_text):
     norm = normalize_text(full_text)
@@ -50,15 +54,15 @@ def classify_series(acct_code, full_text):
     elif acct_code == 'melon':
         if '#mma2026' in norm or 'mma2026' in no_space or '#mma' in norm:
             return 'MMA'
-        if '스포트라이트' in norm or 'spotlight' in norm:
+        if '스포트라이트' in norm or 'spotlight' in norm or '#스포트라이트' in norm:
             return '스포트라이트'
-        if '하이라이징' in norm or 'hi-rising' in norm:
+        if '하이라이징' in norm or 'hi-rising' in norm or '#하이라이징' in norm:
             return '하이라이징'
         if 'datalab' in no_space:
             return 'Data Lab'
         if 'global-k' in norm or 'globalkchart' in no_space:
             return 'Global-K Chart'
-        if '뮤직웨이브' in norm or 'musicwave' in no_space:
+        if '뮤직웨이브' in norm or '뮤직웨이브에' in norm or 'musicwave' in no_space:
             return '뮤직웨이브'
         if '#아뭘듣' in full_text or '아뭘듣' in norm:
             return '아뭘듣'
