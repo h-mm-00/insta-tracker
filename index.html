@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -8,27 +8,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
 
-<!-- Firebase SDK 추가 -->
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
 :root {
-  --bg: #f3f4f6;
+  --bg: #f5f6f8;
   --surface: #ffffff;
-  --ink: #15181e;
-  --muted: #566070;
-  --line: #dde1e7;
-  --soft: #eceef2;
-  --genie: #1560d4;
-  --genie-bg: #e4eefc;
-  --melon: #0b8a3b;
-  --melon-bg: #e0f4e7;
-  --warn: #a4380b;
-  --btn-bg: #15181e;
-  --btn-fg: #ffffff;
-  --font-body: 'IBM Plex Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ink: #14171f;
+  --muted: #5e6878;
+  --line: #e2e5eb;
+  --soft: #edf0f5;
+  --genie: #1062de;
+  --genie-bg: #e5effd;
+  --melon: #0aa849;
+  --melon-bg: #e1f7e9;
+  --warn: #d9381e;
+  --font-body: 'IBM Plex Sans KR', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -36,15 +34,13 @@
     --surface: #171b22;
     --ink: #e8ebf0;
     --muted: #9aa3b0;
-    --line: #2a303a;
-    --soft: #232933;
-    --genie: #6aaaff;
-    --genie-bg: #14284a;
-    --melon: #45d27c;
-    --melon-bg: #11331f;
-    --warn: #ff9a6b;
-    --btn-bg: #e8ebf0;
-    --btn-fg: #0f1217;
+    --line: #272d38;
+    --soft: #202632;
+    --genie: #5f9eff;
+    --genie-bg: #132749;
+    --melon: #40d67c;
+    --melon-bg: #0f331e;
+    --warn: #ff765b;
     color-scheme: dark;
   }
 }
@@ -58,267 +54,166 @@ body {
   margin: 0;
 }
 .wrap {
-  max-width: 1120px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding-block: 28px 56px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding: 32px 20px 64px;
 }
-a { color: inherit; }
-button, input, select, textarea { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--genie); outline-offset: 2px; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
 
-/* header */
-.head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-h1 { margin: 0; font-size: clamp(26px, 4.2vw, 36px); font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; line-height: 1.2; }
-.lede { margin: 0; color: var(--muted); max-width: 62ch; }
-.handles { display: flex; flex-wrap: wrap; gap: 8px 16px; font-family: var(--font-mono); font-size: 12.5px; }
-.handles a { text-decoration: none; border-bottom: 1px solid currentColor; }
+/* Header */
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+h1 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.lede { margin: 6px 0 0; color: var(--muted); font-size: 13.5px; }
+.handles { display: flex; gap: 14px; font-family: var(--font-mono); font-size: 13px; }
+.handles a { border-bottom: 1px solid currentColor; }
 .handles .g { color: var(--genie); }
 .handles .m { color: var(--melon); }
 
-/* toolbar */
-.toolbar { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; margin-bottom: 20px; }
+/* Toolbar */
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 24px; }
 .seg { display: inline-flex; background: var(--soft); border-radius: 8px; padding: 3px; gap: 2px; }
 .seg button {
-  border: 0; background: transparent; padding: 6px 14px; border-radius: 6px; cursor: pointer; color: var(--muted); font-weight: 500;
+  border: 0; background: transparent; padding: 6px 14px; border-radius: 6px; cursor: pointer; color: var(--muted); font-weight: 500; font-size: 13px;
 }
-.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
-.toolbar .spacer { flex: 1 1 auto; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 600; }
+.spacer { flex: 1 1 auto; }
 .ghost {
-  border: 1px solid var(--line); background: var(--surface); padding: 7px 14px; border-radius: 8px; cursor: pointer; font-weight: 500;
+  border: 1px solid var(--line); background: var(--surface); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
 }
 .ghost:hover { border-color: var(--muted); }
 
-/* grid */
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  grid-template-areas: "summary side" "log side";
-  gap: 20px 24px;
-  align-items: start;
+/* Layout Grid */
+.layout { display: flex; flex-direction: column; gap: 24px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+h2 { margin: 0 0 16px; font-size: 16px; font-weight: 600; }
+
+/* Summary Cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; }
+.card { display: flex; flex-direction: column; gap: 16px; }
+.card.genie { --theme: var(--genie); --theme-bg: var(--genie-bg); }
+.card.melon { --theme: var(--melon); --theme-bg: var(--melon-bg); }
+.card-top { display: flex; justify-content: space-between; align-items: baseline; }
+.card-name { font-size: 17px; font-weight: 600; }
+.total { font-family: var(--font-mono); font-size: 32px; font-weight: 600; }
+.total small { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 4px; }
+.split { font-size: 12.5px; color: var(--muted); }
+
+.bars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+@media (max-width: 600px) { .bars { grid-template-columns: 1fr; } }
+.bar-row { display: flex; flex-direction: column; gap: 4px; }
+.bar-meta { display: flex; justify-content: space-between; font-size: 12.5px; }
+.bar-meta .ct { font-family: var(--font-mono); font-weight: 500; }
+.track { height: 6px; border-radius: 3px; background: var(--soft); overflow: hidden; }
+.fill { height: 100%; border-radius: 3px; background: var(--theme); }
+
+/* Calendar */
+.cal-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.cal-title { font-size: 17px; font-weight: 600; flex: 1 1 auto; }
+.cal-title small { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 8px; font-family: var(--font-mono); }
+.cal-wk, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal-wk { text-align: center; font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
+.cc {
+  display: flex; flex-direction: column; gap: 4px; min-height: 104px; padding: 8px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; text-align: left;
 }
-.summary { grid-area: summary; min-width: 0; }
-.side { grid-area: side; min-width: 0; display: flex; flex-direction: column; gap: 20px; position: sticky; top: 16px; }
-.log { grid-area: log; min-width: 0; }
-@media (max-width: 900px) {
-  .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "summary" "side" "log"; }
-  .side { position: static; }
+.cc.out { border-color: transparent; background: transparent; cursor: default; }
+.cc.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.dn { font-family: var(--font-mono); font-size: 12px; font-weight: 500; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.cc.today .dn { background: var(--ink); color: var(--bg); }
+.evs { display: flex; flex-direction: column; gap: 3px; }
+.ev {
+  font-size: 11px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: var(--soft); color: var(--ink); font-weight: 500;
 }
+.more { font-size: 11px; color: var(--muted); padding-left: 4px; }
 
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; }
-h2 { margin: 0 0 14px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
-.label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0.02em; }
-
-/* summary cards */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-.card { --c: var(--genie); --cbg: var(--genie-bg); display: flex; flex-direction: column; gap: 14px; }
-.card.melon { --c: var(--melon); --cbg: var(--melon-bg); }
-.card-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
-.card-name { font-weight: 600; font-size: 16px; }
-.card-handle { font-family: var(--font-mono); font-size: 12px; color: var(--c); }
-.total { font-family: var(--font-mono); font-size: 34px; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
-.total small { font-family: var(--font-body); font-size: 12px; color: var(--muted); margin-left: 4px; }
-.split { color: var(--muted); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; }
-.bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
-.bar-row { display: grid; grid-template-columns: minmax(0, 1fr) 28px; column-gap: 10px; row-gap: 4px; align-items: center; }
-.bar-row .nm { overflow-wrap: anywhere; }
-.bar-row .ct { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
-.bar-row.zero .nm, .bar-row.zero .ct { color: var(--muted); }
-.track { grid-column: 1 / -1; height: 7px; border-radius: 4px; background: var(--soft); overflow: hidden; }
-.fill { height: 100%; background: var(--c); border-radius: 4px; min-width: 0; }
-.strip-wrap { display: flex; flex-direction: column; gap: 6px; }
-.strip { display: flex; align-items: flex-end; gap: 3px; height: 34px; }
-.strip i { flex: 1 1 0; min-width: 0; background: var(--c); border-radius: 2px 2px 0 0; opacity: .85; }
-.strip i.zero { background: var(--soft); opacity: 1; }
-.strip-axis { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
-
-/* log */
-.log-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
-.log-head h2 { margin: 0; }
-.day { margin-top: 18px; }
-.day-h { display: flex; gap: 10px; align-items: baseline; padding-bottom: 6px; border-bottom: 1px solid var(--line); font-weight: 600; }
-.day-h .n { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-weight: 400; }
+/* Log List */
+.log-panel { margin-top: 8px; }
+.log-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
 .rows { list-style: none; margin: 0; padding: 0; }
-.row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--soft); align-items: flex-start; flex-wrap: wrap; }
+.row {
+  display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--soft); align-items: flex-start;
+}
 .row:last-child { border-bottom: 0; }
-.chip { flex: none; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; }
+.chip { font-size: 11.5px; font-weight: 600; padding: 3px 8px; border-radius: 6px; flex: none; }
 .chip.genie { background: var(--genie-bg); color: var(--genie); }
 .chip.melon { background: var(--melon-bg); color: var(--melon); }
-.rmain { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-.rtop { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.kind { font-family: var(--font-mono); font-size: 11.5px; padding: 1px 7px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
-.kind.reel { color: var(--ink); border-color: var(--ink); }
-.ser { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 3px 8px; max-width: 100%; cursor: pointer; }
-.memo { margin: 0; color: var(--muted); overflow-wrap: anywhere; }
-.ract { display: flex; gap: 12px; align-items: center; flex: none; margin-left: auto; font-size: 13px; }
-.ract a { color: var(--muted); }
-.del { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 2px 4px; font-size: 13px; }
-.del:hover { color: var(--warn); }
-.del.armed { color: var(--warn); font-weight: 600; }
-.empty { padding: 26px 4px 8px; color: var(--muted); max-width: 52ch; }
-
-/* form */
-form { display: flex; flex-direction: column; gap: 14px; }
-.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.radios { display: flex; background: var(--soft); border-radius: 8px; padding: 3px; gap: 2px; }
-.radios input { position: absolute; opacity: 0; pointer-events: none; }
-.radios label { flex: 1 1 0; text-align: center; padding: 6px 8px; border-radius: 6px; cursor: pointer; color: var(--muted); font-weight: 500; }
-.radios input:checked + label { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.inp { width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
-textarea.inp { resize: vertical; min-height: 64px; }
-.primary { border: 0; background: var(--btn-bg); color: var(--btn-fg); padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-.msg { min-height: 20px; font-size: 13px; color: var(--muted); margin: 0; }
-.msg.ok { color: var(--melon); }
-.msg.err { color: var(--warn); }
-.sr-chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0 0 12px; }
-.sr-chips li { display: inline-flex; align-items: center; gap: 2px; background: var(--soft); border-radius: 6px; padding: 2px 4px 2px 10px; }
-.sr-chips button { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 0 6px; font-size: 15px; }
-.add-line { display: flex; gap: 8px; }
-.note { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); }
-.banner { background: var(--soft); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; color: var(--muted); }
-
-/* calendar */
-.cal-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.cal-title { display: flex; align-items: baseline; gap: 10px; flex: 1 1 auto; min-width: 0; font-size: 16px; }
-.cal-wk, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
-.cal-wk { margin-bottom: 4px; text-align: center; font-size: 12px; color: var(--muted); font-weight: 500; }
-.cc { display: flex; flex-direction: column; align-items: stretch; gap: 4px; text-align: left; min-width: 0; min-height: 96px; padding: 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); cursor: pointer; overflow: hidden; }
-.cc.out { border-color: transparent; background: transparent; cursor: default; }
-.cc.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
-.dn { font-family: var(--font-mono); font-size: 12px; align-self: flex-start; min-width: 22px; padding: 0 5px; text-align: center; border-radius: 999px; }
-.cc.today .dn { background: var(--ink); color: var(--bg); }
-.evs { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.ev { display: block; font-size: 11px; line-height: 1.35; padding: 1px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 0 0 0 1px rgba(127, 127, 127, .22); }
-.ev.genie { background: var(--genie-bg); color: var(--genie); }
-.ev.melon { background: var(--melon-bg); color: var(--melon); }
-.more { font-size: 11px; color: var(--muted); padding-left: 5px; }
-.dots { display: none; flex-wrap: wrap; gap: 4px; }
-.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
-.dot.genie { background: var(--genie); }
-.dot.melon { background: var(--melon); }
-.dot.reel { border-radius: 1px; transform: rotate(45deg); }
-.cal-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 18px; font-size: 12px; color: var(--muted); }
-.cal-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.sw { display: inline-block; flex: none; width: 16px; height: 10px; border-radius: 3px; background: var(--soft); box-shadow: inset 0 0 0 1px rgba(127, 127, 127, .35); }
-.art { font-weight: 600; }
-@media (max-width: 640px) {
-  .cc { min-height: 54px; padding: 4px; }
-  .evs { display: none; }
-  .dots { display: flex; }
-}
+.rmain { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.rtop { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.kind { font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
+.kind.reel { border-color: var(--ink); color: var(--ink); }
+.ser-tag { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--soft); }
+.art { font-size: 13.5px; font-weight: 600; }
+.memo { margin: 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.ract { flex: none; font-size: 13px; }
+.ract a { color: var(--muted); border-bottom: 1px solid transparent; }
+.ract a:hover { color: var(--ink); border-color: currentColor; }
+.empty { padding: 32px 0; text-align: center; color: var(--muted); }
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header class="head">
-    <h1>인스타 게시물 트래커</h1>
-    <p class="lede">지니뮤직과 멜론 계정에 올라온 피드와 릴스를 날짜별로 기록하고 분류해 모아 봅니다.</p>
+    <div>
+      <h1>인스타 게시물 트래커</h1>
+      <p class="lede">지니뮤직과 멜론의 공식 인스타그램 피드 및 릴스 시리즈 자동 아카이브</p>
+    </div>
     <div class="handles">
       <a class="g" href="https://www.instagram.com/genie_music/" target="_blank" rel="noopener">@genie_music</a>
       <a class="m" href="https://www.instagram.com/melon_music/" target="_blank" rel="noopener">@melon_music</a>
     </div>
   </header>
 
-  <div id="banner" class="banner" hidden></div>
-
   <div class="toolbar">
-    <div class="seg" id="seg-view" role="group" aria-label="보기 방식">
-      <button type="button" data-v="cal" aria-pressed="true">달력</button>
-      <button type="button" data-v="list" aria-pressed="false">목록</button>
+    <div class="seg" id="seg-view" role="group">
+      <button type="button" data-v="cal" aria-pressed="true">달력 보기</button>
+      <button type="button" data-v="list" aria-pressed="false">목록 전체보기</button>
     </div>
-    <div class="seg" id="seg-acct" role="group" aria-label="계정">
+    <div class="seg" id="seg-acct" role="group">
       <button type="button" data-v="all" aria-pressed="true">전체</button>
       <button type="button" data-v="genie" aria-pressed="false">지니뮤직</button>
       <button type="button" data-v="melon" aria-pressed="false">멜론</button>
     </div>
-    <div class="seg" id="seg-period" role="group" aria-label="기간" hidden>
+    <div class="seg" id="seg-period" role="group" hidden>
       <button type="button" data-v="7" aria-pressed="false">7일</button>
       <button type="button" data-v="30" aria-pressed="true">30일</button>
-      <button type="button" data-v="all" aria-pressed="false">전체 기간</button>
+      <button type="button" data-v="all" aria-pressed="false">전체</button>
     </div>
     <span class="spacer"></span>
-    <button type="button" class="ghost" id="btn-export">현재 보기 CSV 저장</button>
+    <button type="button" class="ghost" id="btn-export">CSV 저장</button>
   </div>
 
-  <div class="layout">
-    <section class="summary" aria-label="요약">
-      <div class="cards" id="cards"></div>
-    </section>
+  <main class="layout">
+    <!-- 시리즈별 집계 요약 카드 -->
+    <section class="cards" id="cards"></section>
 
-    <aside class="side">
-      <section class="panel" aria-label="게시물 기록">
-        <h2>게시물 수동 기록</h2>
-        <form id="form" autocomplete="off">
-          <div class="field">
-            <span class="label">계정</span>
-            <div class="radios">
-              <input type="radio" name="acct" id="acct-genie" value="genie" checked><label for="acct-genie">지니뮤직</label>
-              <input type="radio" name="acct" id="acct-melon" value="melon"><label for="acct-melon">멜론</label>
-            </div>
-          </div>
-          <div class="two">
-            <div class="field">
-              <label class="label" for="f-date">게시일</label>
-              <input class="inp" type="date" id="f-date" required>
-            </div>
-            <div class="field">
-              <span class="label">유형</span>
-              <div class="radios">
-                <input type="radio" name="kind" id="kind-feed" value="feed" checked><label for="kind-feed">피드</label>
-                <input type="radio" name="kind" id="kind-reel" value="reel"><label for="kind-reel">릴스</label>
-              </div>
-            </div>
-          </div>
-          <div class="field">
-            <label class="label" for="f-url">게시물 링크</label>
-            <input class="inp" type="url" id="f-url" placeholder="https://www.instagram.com/reel/…">
-          </div>
-          <div class="field">
-            <label class="label" for="f-series">시리즈</label>
-            <select class="inp" id="f-series"></select>
-          </div>
-          <div class="field">
-            <label class="label" for="f-artist">아티스트</label>
-            <input class="inp" type="text" id="f-artist" placeholder="예: 엔믹스 (선택)">
-          </div>
-          <div class="field">
-            <label class="label" for="f-memo">메모</label>
-            <textarea class="inp" id="f-memo" rows="2" placeholder="캡션 요약, 특이사항"></textarea>
-          </div>
-          <button class="primary" type="submit" id="btn-add">기록 추가</button>
-          <p class="msg" id="msg"></p>
-        </form>
-      </section>
-
-      <section class="panel" aria-label="시리즈 관리">
-        <h2 id="sr-title">시리즈 관리</h2>
-        <ul class="sr-chips" id="sr-chips"></ul>
-        <form class="add-line" id="sr-form">
-          <input class="inp" id="sr-name" type="text" placeholder="새 시리즈 이름">
-          <button class="ghost" type="submit">추가</button>
-        </form>
-        <p class="note">시리즈를 추가하면 고유 색상 태그가 부여됩니다.</p>
-      </section>
-    </aside>
-
-    <section class="log panel" aria-label="기록 목록">
+    <!-- 달력 및 게시물 리스트 패널 -->
+    <section class="panel log-panel">
       <div id="cal"></div>
       <div class="log-head">
-        <h2 id="log-title">날짜별 기록</h2>
-        <span class="label" id="log-count"></span>
+        <h2 id="log-title">기록 상세</h2>
+        <span class="split" id="log-count">0건</span>
       </div>
       <div id="log"></div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script>
-// ==========================================
-// 1. Firebase 초기화 설정 (본인의 키로 교체)
-// ==========================================
+// ========================================================
+// 1. Firebase 설정 (본인의 Firebase 웹 config 붙여넣기)
+// ========================================================
 var firebaseConfig = {
   apiKey: "AIzaSyBIi2WfYMEGSyNbUEhhwjIK5ffw3A5sOA0",
   authDomain: "instatracker-b9ccb.firebaseapp.com",
@@ -334,307 +229,257 @@ if (!firebase.apps.length) {
 }
 var db = firebase.firestore();
 
-// ==========================================
-// 2. 대시보드 로직
-// ==========================================
+// ========================================================
+// 2. 자체 내장 시리즈 및 컬러 매핑 정의
+// ========================================================
+var SERIES_MAP = {
+  melon: [
+    { name: '스포트라이트', bg: '#fef08a', color: '#854d0e' },
+    { name: '하이라이징', bg: '#fed7aa', color: '#9a3412' },
+    { name: '뮤직웨이브', bg: '#bfdbfe', color: '#1e40af' },
+    { name: 'MMA', bg: '#fbcfe8', color: '#9d174d' },
+    { name: 'Data Lab', bg: '#e9d5ff', color: '#6b21a8' },
+    { name: 'Global-K Chart', bg: '#c7d2fe', color: '#3730a3' },
+    { name: '아뭘듣', bg: '#bbf7d0', color: '#166534' },
+    { name: '오프라인', bg: '#ddd6fe', color: '#5b21b6' },
+    { name: '기타', bg: '#f1f5f9', color: '#475569' }
+  ],
+  genie: [
+    { name: '스트림파티', bg: '#bae6fd', color: '#0369a1' },
+    { name: '지니인사이드', bg: '#fed7aa', color: '#9a3412' },
+    { name: '지니인사이드, 옥외광고', bg: '#fde68a', color: '#854d0e' },
+    { name: '지니에 왔지니', bg: '#bbf7d0', color: '#166534' },
+    { name: '러닝', bg: '#ddd6fe', color: '#5b21b6' },
+    { name: '기타', bg: '#f1f5f9', color: '#475569' }
+  ]
+};
+
 (function () {
   var ACC = {
-    genie: { name: '지니뮤직', short: '지니', handle: '@genie_music' },
-    melon: { name: '멜론', short: '멜론', handle: '@melon_music' }
+    genie: { name: '지니뮤직', short: '지니' },
+    melon: { name: '멜론', short: '멜론' }
   };
   var WD = ['일', '월', '화', '수', '목', '금', '토'];
-  var state = { posts: [], series: [], acct: 'all', period: '30', db: db, loaded: false, armed: null, formAcct: 'genie',
-    view: 'cal', cy: new Date().getFullYear(), cm: new Date().getMonth(), selDay: ymd(new Date()) };
+  var state = {
+    posts: [],
+    acct: 'all',
+    period: '30',
+    view: 'cal',
+    cy: new Date().getFullYear(),
+    cm: new Date().getMonth(),
+    selDay: ymd(new Date()),
+    loaded: false
+  };
 
   function $(id) { return document.getElementById(id); }
   function pad(n) { return String(n).padStart(2, '0'); }
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function todayStr() { return ymd(new Date()); }
-  function daysAgoStr(n) { var d = new Date(); d.setDate(d.getDate() - n); return ymd(d); }
-  function parseYmd(s) { var p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
   function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    return String(s || '').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
   }
 
-  function periodStart() {
-    if (state.period === 'all') return '0000-00-00';
-    return daysAgoStr(parseInt(state.period, 10) - 1);
+  function getSeriesStyle(acct, seriesName) {
+    var list = SERIES_MAP[acct] || [];
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].name === seriesName) return list[i];
+    }
+    return { bg: '#f1f5f9', color: '#475569' };
   }
-  function visibleAccts() { return state.acct === 'all' ? ['genie', 'melon'] : [state.acct]; }
-  function filteredPosts() {
+
+  function visibleAccts() {
+    return state.acct === 'all' ? ['genie', 'melon'] : [state.acct];
+  }
+
+  function inDateRange(d) {
+    if (state.view === 'cal') return d.slice(0, 7) === state.cy + '-' + pad(state.cm + 1);
+    if (state.period === 'all') return true;
+    var limit = new Date(); limit.setDate(limit.getDate() - parseInt(state.period, 10) + 1);
+    return d >= ymd(limit);
+  }
+
+  function getFilteredPosts() {
     var accts = visibleAccts();
-    return state.posts.filter(function (p) { return accts.indexOf(p.account) > -1 && inRange(p.date); })
-      .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : (b.createdAt || 0) - (a.createdAt || 0); });
-  }
-  function seriesFor(acct) {
-    return state.series.filter(function (s) { return s.account === acct; })
-      .sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-  }
-  function seriesNames(acct, extraName) {
-    var names = seriesFor(acct).map(function (s) { return s.name; });
-    state.posts.forEach(function (p) { if (p.account === acct && p.series && names.indexOf(p.series) < 0) names.push(p.series); });
-    if (extraName && names.indexOf(extraName) < 0) names.push(extraName);
-    return names;
+    return state.posts.filter(function (p) {
+      return accts.indexOf(p.account) > -1 && inDateRange(p.date);
+    }).sort(function (a, b) {
+      return a.date < b.date ? 1 : a.date > b.date ? -1 : (b.createdAt || 0) - (a.createdAt || 0);
+    });
   }
 
   function renderCards() {
-    var out = '';
-    visibleAccts().forEach(function (a) {
-      var posts = state.posts.filter(function (p) { return p.account === a && inRange(p.date); });
-      var feed = posts.filter(function (p) { return p.kind === 'feed'; }).length;
-      var reel = posts.filter(function (p) { return p.kind === 'reel'; }).length;
-      var names = seriesNames(a);
+    var html = '';
+    visibleAccts().forEach(function (acct) {
+      var acctPosts = state.posts.filter(function (p) {
+        return p.account === acct && inDateRange(p.date);
+      });
+      var feedCount = acctPosts.filter(function (p) { return p.kind === 'feed'; }).length;
+      var reelCount = acctPosts.filter(function (p) { return p.kind === 'reel'; }).length;
+
       var counts = {};
-      posts.forEach(function (p) { var k = p.series || '기타'; counts[k] = (counts[k] || 0) + 1; });
-      if (counts['기타'] && names.indexOf('기타') < 0) names.push('기타');
+      acctPosts.forEach(function (p) {
+        var s = p.series || '기타';
+        counts[s] = (counts[s] || 0) + 1;
+      });
+
+      var seriesList = SERIES_MAP[acct];
       var max = 1;
-      names.forEach(function (n) { if ((counts[n] || 0) > max) max = counts[n]; });
-      var bars = names.map(function (n) {
-        var c = counts[n] || 0;
-        var sc = sstyle(a, n);
-        return '<li class="bar-row' + (c ? '' : ' zero') + '"><span class="nm">' + esc(n) + '</span><span class="ct">' + c +
-          '</span><div class="track"><div class="fill" style="width:' + (c / max * 100) + '%;' + (sc ? 'background:linear-gradient(90deg,' + sc[0] + ',' + sc[1] + ')' : '') + '"></div></div></li>';
+      seriesList.forEach(function (s) {
+        if ((counts[s.name] || 0) > max) max = counts[s.name];
+      });
+
+      var bars = seriesList.map(function (s) {
+        var c = counts[s.name] || 0;
+        return '<li class="bar-row">' +
+          '<div class="bar-meta"><span style="font-weight:500;">' + esc(s.name) + '</span><span class="ct">' + c + '</span></div>' +
+          '<div class="track"><div class="fill" style="width:' + (c / max * 100) + '%;background:' + s.color + '"></div></div>' +
+        '</li>';
       }).join('');
 
-      var perDay = [], dmax = 1, i;
-      for (i = 13; i >= 0; i--) {
-        var ds = daysAgoStr(i);
-        var n = state.posts.filter(function (p) { return p.account === a && p.date === ds; }).length;
-        perDay.push({ d: ds, n: n });
-        if (n > dmax) dmax = n;
-      }
-      var strip = perDay.map(function (x) {
-        var h = x.n ? Math.max(6, Math.round(x.n / dmax * 34)) : 3;
-        return '<i class="' + (x.n ? '' : 'zero') + '" style="height:' + h + 'px" title="' + x.d + ' · ' + x.n + '건"></i>';
-      }).join('');
-
-      out += '<article class="panel card ' + a + '">' +
-        '<div class="card-top"><div><div class="card-name">' + ACC[a].name + '</div><div class="card-handle">' + ACC[a].handle + '</div></div>' +
-        '<div><div class="total">' + posts.length + '<small>건</small></div></div></div>' +
-        '<div class="split">피드 ' + feed + ' · 릴스 ' + reel + '</div>' +
+      html += '<article class="panel card ' + acct + '">' +
+        '<div class="card-top">' +
+          '<div><div class="card-name">' + ACC[acct].name + '</div><div class="split">피드 ' + feedCount + ' · 릴스 ' + reelCount + '</div></div>' +
+          '<div class="total">' + acctPosts.length + '<small>건</small></div>' +
+        '</div>' +
         '<ul class="bars">' + bars + '</ul>' +
-        '<div class="strip-wrap"><span class="label">최근 14일 게시 수</span><div class="strip">' + strip + '</div>' +
-        '<div class="strip-axis"><span>' + perDay[0].d.slice(5).replace('-', '/') + '</span><span>' + perDay[13].d.slice(5).replace('-', '/') + '</span></div></div>' +
-        '</article>';
+      '</article>';
     });
-    $('cards').innerHTML = out;
+    $('cards').innerHTML = html;
   }
 
-  var PAL = {
-    genie: [['#cdebfc', '#a6dcf8', '#0a3552'], ['#8fd0f4', '#62bcec', '#052f4d'], ['#3aa3e3', '#2a8fd6', '#03203a'], ['#1a6fbd', '#1259a3', '#ffffff'], ['#0f3f7a', '#0a2f61', '#ffffff']],
-    melon: [['#c9f0d6', '#9fe3b6', '#0a3a1c'], ['#7fd79c', '#55c47e', '#052e15'], ['#2fae5f', '#229a50', '#03210f'], ['#14783b', '#0d6230', '#ffffff'], ['#0a4a24', '#063a1b', '#ffffff']]
-  };
-  function sstyle(acct, name) {
-    if (!name) return null;
-    var s = state.series.filter(function (x) { return x.account === acct && x.name === name; })[0];
-    if (!s || typeof s.ci !== 'number') return null;
-    return PAL[acct][s.ci % PAL[acct].length];
-  }
-  function chipStyle(c) { return c ? 'background:linear-gradient(90deg,' + c[0] + ',' + c[1] + ');color:' + c[2] : ''; }
-  function dotStyle(c) { return c ? 'background:linear-gradient(135deg,' + c[0] + ',' + c[1] + ')' : ''; }
-  function nextCi(acct) {
-    var used = seriesFor(acct).map(function (s) { return s.ci; });
-    for (var i = 0; i < 30; i++) if (used.indexOf(i) < 0) return i;
-    return 0;
-  }
-  function inRange(d) {
-    if (state.view === 'cal') return d.slice(0, 7) === state.cy + '-' + pad(state.cm + 1);
-    return d >= periodStart();
-  }
-  function rowHtml(p) {
-    var opts = seriesNames(p.account, p.series).map(function (n) {
-      return '<option value="' + esc(n) + '"' + (n === p.series ? ' selected' : '') + '>' + esc(n) + '</option>';
-    }).join('');
-    if (!p.series) opts = '<option value="" selected>기타</option>' + opts;
-    var link = p.url ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">열기 ↗</a>' : '';
-    var armed = state.armed === p.id;
-    var c = sstyle(p.account, p.series);
-    return '<li class="row"><span class="chip ' + p.account + '">' + ACC[p.account].short + '</span>' +
-      '<div class="rmain"><div class="rtop"><span class="kind ' + p.kind + '">' + (p.kind === 'reel' ? '릴스' : '피드') + '</span>' +
-      '<i class="sw" style="' + dotStyle(c) + '"></i>' +
-      '<select class="ser" data-id="' + esc(p.id) + '" aria-label="시리즈 변경">' + opts + '</select>' +
-      (p.artist ? '<strong class="art">' + esc(p.artist) + '</strong>' : '') + '</div>' +
-      (p.memo ? '<p class="memo">' + esc(p.memo) + '</p>' : '') + '</div>' +
-      '<div class="ract">' + link + '<button type="button" class="del' + (armed ? ' armed' : '') + '" data-id="' + esc(p.id) + '">' + (armed ? '삭제 확인' : '삭제') + '</button></div></li>';
-  }
-  function dayLabel(s) {
-    var d = parseYmd(s);
-    return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + WD[d.getDay()] + ')' + (s === todayStr() ? ' · 오늘' : '');
-  }
-  function renderDay() {
-    var d = state.selDay, accts = visibleAccts();
-    var posts = state.posts.filter(function (p) { return p.date === d && accts.indexOf(p.account) > -1; })
-      .sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });
-    $('log-title').textContent = dayLabel(d);
-    $('log-count').textContent = posts.length + '건';
-    if (!state.loaded) { $('log').innerHTML = '<p class="empty">불러오는 중…</p>'; return; }
-    if (!posts.length) {
-      $('log').innerHTML = '<p class="empty">이 날은 등록된 게시물이 없습니다.</p>';
-      return;
-    }
-    $('log').innerHTML = '<ul class="rows">' + posts.map(rowHtml).join('') + '</ul>';
-  }
   function renderCal() {
+    if (state.view !== 'cal') { $('cal').innerHTML = ''; return; }
     var y = state.cy, m = state.cm, accts = visibleAccts(), by = {};
-    state.posts.forEach(function (p) { if (accts.indexOf(p.account) > -1) (by[p.date] = by[p.date] || []).push(p); });
+    state.posts.forEach(function (p) {
+      if (accts.indexOf(p.account) > -1) {
+        (by[p.date] = by[p.date] || []).push(p);
+      }
+    });
+
     var first = new Date(y, m, 1).getDay();
     var dim = new Date(y, m + 1, 0).getDate();
     var total = Math.ceil((first + dim) / 7) * 7;
     var key = y + '-' + pad(m + 1), count = 0, cells = '', today = todayStr();
+
     for (var i = 0; i < total; i++) {
       var day = i - first + 1;
-      if (day < 1 || day > dim) { cells += '<div class="cc out" aria-hidden="true"></div>'; continue; }
+      if (day < 1 || day > dim) {
+        cells += '<div class="cc out" aria-hidden="true"></div>';
+        continue;
+      }
       var ds = key + '-' + pad(day);
-      var list = (by[ds] || []).slice().sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });
+      var list = (by[ds] || []).sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });
       count += list.length;
+
       var evs = list.slice(0, 3).map(function (p) {
-        var c = sstyle(p.account, p.series);
-        var label = (c ? '' : ACC[p.account].short + ' ') + (p.artist || p.series || (p.kind === 'reel' ? '릴스' : '피드'));
-        return '<span class="ev ' + p.account + '" style="' + chipStyle(c) + '">' + esc(label) + '</span>';
+        var style = getSeriesStyle(p.account, p.series);
+        var label = (p.artist ? p.artist : p.series) || (p.kind === 'reel' ? '릴스' : '피드');
+        return '<span class="ev" style="background:' + style.bg + ';color:' + style.color + '">' + esc(label) + '</span>';
       }).join('');
+
       if (list.length > 3) evs += '<span class="more">+' + (list.length - 3) + '건</span>';
-      var dots = list.slice(0, 8).map(function (p) {
-        var c = sstyle(p.account, p.series);
-        return '<i class="dot ' + p.account + (p.kind === 'reel' ? ' reel' : '') + '" style="' + dotStyle(c) + '"></i>';
-      }).join('');
+
       cells += '<button type="button" class="cc' + (ds === today ? ' today' : '') + (ds === state.selDay ? ' sel' : '') + '" data-d="' + ds + '">' +
-        '<span class="dn">' + day + '</span><span class="evs">' + evs + '</span><span class="dots">' + dots + '</span></button>';
+        '<span class="dn">' + day + '</span><div class="evs">' + evs + '</div></button>';
     }
+
     $('cal').innerHTML =
-      '<div class="cal-nav"><button type="button" class="ghost" data-nav="prev">‹</button>' +
-      '<div class="cal-title"><strong>' + y + '년 ' + (m + 1) + '월</strong><span class="label">' + count + '건</span></div>' +
-      '<button type="button" class="ghost" data-nav="today">오늘</button>' +
-      '<button type="button" class="ghost" data-nav="next">›</button></div>' +
-      '<div class="cal-wk">' + WD.map(function (w) { return '<span>' + w + '</span>'; }).join('') + '</div>' +
+      '<div class="cal-nav">' +
+        '<div class="cal-title"><strong>' + y + '년 ' + (m + 1) + '월</strong><small>' + count + '건 발행</small></div>' +
+        '<button type="button" class="ghost" data-nav="prev">‹</button>' +
+        '<button type="button" class="ghost" data-nav="today">오늘</button>' +
+        '<button type="button" class="ghost" data-nav="next">›</button>' +
+      '</div>' +
+      '<div class="cal-wk">' + WD.map(function(w){ return '<span>' + w + '</span>'; }).join('') + '</div>' +
       '<div class="cal-grid">' + cells + '</div>';
   }
+
+  function rowHtml(p) {
+    var style = getSeriesStyle(p.account, p.series);
+    var link = p.url ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">인스타 열기 ↗</a>' : '';
+    return '<li class="row">' +
+      '<span class="chip ' + p.account + '">' + ACC[p.account].short + '</span>' +
+      '<div class="rmain">' +
+        '<div class="rtop">' +
+          '<span class="kind ' + p.kind + '">' + (p.kind === 'reel' ? '릴스' : '피드') + '</span>' +
+          '<span class="ser-tag" style="background:' + style.bg + ';color:' + style.color + '">' + esc(p.series || '기타') + '</span>' +
+          (p.artist ? '<span class="art">' + esc(p.artist) + '</span>' : '') +
+          '<span class="split" style="font-family:var(--font-mono);">' + p.date + '</span>' +
+        '</div>' +
+        (p.memo ? '<p class="memo">' + esc(p.memo) + '</p>' : '') +
+      '</div>' +
+      '<div class="ract">' + link + '</div>' +
+    '</li>';
+  }
+
   function renderLog() {
-    if (state.view === 'cal') { renderDay(); return; }
-    $('log-title').textContent = '날짜별 기록';
-    var posts = filteredPosts();
-    $('log-count').textContent = posts.length + '건';
-    if (!state.loaded) { $('log').innerHTML = '<p class="empty">불러오는 중…</p>'; return; }
-    if (!posts.length) {
-      $('log').innerHTML = '<p class="empty">선택한 기간에 등록된 게시물이 없습니다.</p>';
+    if (!state.loaded) {
+      $('log').innerHTML = '<div class="empty">데이터를 동기화하는 중…</div>';
       return;
     }
-    var html = '', cur = null, open = false, perDay = {};
-    posts.forEach(function (p) { perDay[p.date] = (perDay[p.date] || 0) + 1; });
-    posts.forEach(function (p) {
-      if (p.date !== cur) {
-        if (open) html += '</ul></div>';
-        cur = p.date; open = true;
-        html += '<div class="day"><div class="day-h"><span>' + dayLabel(p.date) + '</span><span class="n">' + perDay[p.date] + '건</span></div><ul class="rows">';
+
+    if (state.view === 'cal') {
+      var d = state.selDay;
+      var posts = state.posts.filter(function (p) {
+        return p.date === d && visibleAccts().indexOf(p.account) > -1;
+      }).sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });
+
+      $('log-title').textContent = d + ' (' + WD[new Date(d).getDay()] + ')';
+      $('log-count').textContent = posts.length + '건';
+
+      if (!posts.length) {
+        $('log').innerHTML = '<div class="empty">해당 날짜에 수집된 게시물이 없습니다.</div>';
+        return;
       }
-      html += rowHtml(p);
-    });
-    if (open) html += '</ul></div>';
-    $('log').innerHTML = html;
+      $('log').innerHTML = '<ul class="rows">' + posts.map(rowHtml).join('') + '</ul>';
+    } else {
+      $('log-title').textContent = '기간 내 전체 목록';
+      var posts = getFilteredPosts();
+      $('log-count').textContent = posts.length + '건';
+
+      if (!posts.length) {
+        $('log').innerHTML = '<div class="empty">조건에 해당하는 게시물이 없습니다.</div>';
+        return;
+      }
+      $('log').innerHTML = '<ul class="rows">' + posts.map(rowHtml).join('') + '</ul>';
+    }
   }
-  function renderSeriesSelect() {
-    var sel = $('f-series'), prev = sel.value;
-    var names = seriesNames(state.formAcct);
-    sel.innerHTML = names.length
-      ? names.map(function (n) { return '<option value="' + esc(n) + '">' + esc(n) + '</option>'; }).join('')
-      : '<option value="기타">기타</option>';
-    if (prev && names.indexOf(prev) > -1) sel.value = prev;
-  }
-  function renderSeriesPanel() {
-    $('sr-title').textContent = ACC[state.formAcct].name + ' 시리즈 관리';
-    var list = seriesFor(state.formAcct);
-    $('sr-chips').innerHTML = list.length
-      ? list.map(function (s) {
-          return '<li><span>' + esc(s.name) + '</span><button type="button" data-id="' + esc(s.id) + '">×</button></li>';
-        }).join('')
-      : '<li><span>등록된 시리즈가 없습니다.</span></li>';
-  }
+
   function renderAll() {
-    renderCards(); renderCal(); renderLog(); renderSeriesSelect(); renderSeriesPanel();
+    renderCards();
+    renderCal();
+    renderLog();
   }
 
-  function setMsg(text, kind) {
-    var el = $('msg');
-    el.textContent = text; el.className = 'msg' + (kind ? ' ' + kind : '');
-    setTimeout(function () { el.textContent = ''; el.className = 'msg'; }, 4000);
+  function setPressed(container, val) {
+    container.querySelectorAll('button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === val));
+    });
   }
 
-  function pressed(group, v) {
-    group.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === v)); });
-  }
+  // Toolbar Events
+  $('seg-view').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    state.view = b.getAttribute('data-v');
+    setPressed($('seg-view'), state.view);
+    $('seg-period').hidden = (state.view === 'cal');
+    renderAll();
+  });
 
   $('seg-acct').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    state.acct = b.getAttribute('data-v'); pressed($('seg-acct'), state.acct); renderCards(); renderCal(); renderLog();
+    state.acct = b.getAttribute('data-v');
+    setPressed($('seg-acct'), state.acct);
+    renderAll();
   });
+
   $('seg-period').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    state.period = b.getAttribute('data-v'); pressed($('seg-period'), state.period); renderCards(); renderLog();
-  });
-  $('seg-view').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    state.view = b.getAttribute('data-v'); pressed($('seg-view'), state.view);
-    $('cal').hidden = (state.view !== 'cal');
-    $('seg-period').hidden = (state.view === 'cal');
-    renderCards(); renderCal(); renderLog();
-  });
-
-  document.querySelectorAll('input[name="acct"]').forEach(function (r) {
-    r.addEventListener('change', function () {
-      state.formAcct = r.value; renderSeriesSelect(); renderSeriesPanel();
-    });
-  });
-
-  $('form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var date = $('f-date').value, url = $('f-url').value.trim(), series = $('f-series').value, memo = $('f-memo').value.trim(), artist = $('f-artist').value.trim();
-    if (!date) return;
-    var btn = $('btn-add'); btn.disabled = true;
-    db.collection('posts').add({
-      account: state.formAcct,
-      date: date,
-      kind: document.querySelector('input[name="kind"]:checked').value,
-      series: series || '기타',
-      artist: artist,
-      url: url,
-      memo: memo,
-      createdAt: Date.now()
-    }).then(function () {
-      $('f-url').value = ''; $('f-memo').value = ''; $('f-artist').value = '';
-      setMsg('기록을 추가했습니다.', 'ok');
-    }).catch(function () { setMsg('저장 실패', 'err'); })
-      .then(function () { btn.disabled = false; });
-  });
-
-  $('sr-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = $('sr-name').value.trim();
-    if (!name) return;
-    db.collection('series').add({ account: state.formAcct, name: name, order: Date.now(), ci: nextCi(state.formAcct) })
-      .then(function () { $('sr-name').value = ''; });
-  });
-
-  $('sr-chips').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-id]'); if (!b) return;
-    db.collection('series').doc(b.getAttribute('data-id')).delete();
-  });
-
-  $('log').addEventListener('click', function (e) {
-    var b = e.target.closest('button.del'); if (!b) return;
-    var id = b.getAttribute('data-id');
-    if (state.armed !== id) {
-      state.armed = id; renderLog();
-      setTimeout(function () { state.armed = null; renderLog(); }, 3000);
-      return;
-    }
-    state.armed = null;
-    db.collection('posts').doc(id).delete();
-  });
-
-  $('log').addEventListener('change', function (e) {
-    var s = e.target.closest('select.ser'); if (!s) return;
-    db.collection('posts').doc(s.getAttribute('data-id')).update({ series: s.value });
+    state.period = b.getAttribute('data-v');
+    setPressed($('seg-period'), state.period);
+    renderAll();
   });
 
   $('cal').addEventListener('click', function (e) {
@@ -647,47 +492,33 @@ var db = firebase.firestore();
         var d = new Date(state.cy, state.cm + (dir === 'prev' ? -1 : 1), 1);
         state.cy = d.getFullYear(); state.cm = d.getMonth(); state.selDay = ymd(d);
       }
-      $('f-date').value = state.selDay;
-      renderCards(); renderCal(); renderLog();
+      renderAll();
       return;
     }
     var c = e.target.closest('button[data-d]');
     if (c) {
-      state.selDay = c.getAttribute('data-d'); $('f-date').value = state.selDay;
-      renderCal(); renderLog();
+      state.selDay = c.getAttribute('data-d');
+      renderCal();
+      renderLog();
     }
   });
 
   $('btn-export').addEventListener('click', function () {
-    var posts = filteredPosts();
-    if (!posts.length) return alert('저장할 데이터가 없습니다.');
-    var rows = [['게시일', '계정', '유형', '시리즈', '아티스트', '링크', '메모']].concat(posts.map(function (p) {
-      return [p.date, ACC[p.account].name, p.kind === 'reel' ? '릴스' : '피드', p.series || '기타', p.artist || '', p.url || '', p.memo || ''];
+    var posts = getFilteredPosts();
+    if (!posts.length) return alert('내보낼 데이터가 없습니다.');
+    var rows = [['게시일', '계정', '유형', '시리즈', '아티스트', 'URL', '메모']].concat(posts.map(function(p){
+      return [p.date, ACC[p.account].name, p.kind, p.series || '기타', p.artist || '', p.url || '', p.memo || ''];
     }));
-    var csvContent = '\uFEFF' + rows.map(function (e) { return e.map(function(v){ return '"' + String(v||'').replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
-    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = 'instagram_tracker_' + todayStr() + '.csv';
-    link.click();
+    var csv = '\uFEFF' + rows.map(function(r){ return r.map(function(v){ return '"' + String(v||'').replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'instagram_archive_' + todayStr() + '.csv'; a.click();
   });
 
-  // 초기 날짜 세팅
-  $('f-date').value = todayStr();
-
-  // Firestore 실시간 리스너 연결
-  db.collection('posts').orderBy('date', 'desc').limit(1000).onSnapshot(function (snap) {
+  // Firestore 연결
+  db.collection('posts').orderBy('date', 'desc').limit(2000).onSnapshot(function (snap) {
     state.posts = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
     state.loaded = true;
-    renderAll();
-  }, function (err) {
-    state.loaded = true;
-    var b = $('banner'); b.textContent = '데이터를 불러오지 못했습니다. Firebase 보안 규칙을 확인해주세요.'; b.hidden = false;
-    renderLog();
-  });
-
-  db.collection('series').onSnapshot(function (snap) {
-    state.series = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
     renderAll();
   });
 
