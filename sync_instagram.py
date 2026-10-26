@@ -99,7 +99,8 @@ def sync():
 
         run_input = {
             "directUrls": [f"https://www.instagram.com/{insta_handle}/"],
-            "resultsLimit": 7,
+            "resultsLimit": 800,
+            "onlyPostsNewerThan": "2026-01-01",
             "resultsType": "posts",
             "commentsMode": "FIRST_PAGE",
             "commentsLimit": 5
