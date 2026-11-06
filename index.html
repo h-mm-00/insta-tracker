@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>인스타 게시물 트래커</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -212,21 +212,17 @@ h2 { margin: 0 0 16px; font-size: 16px; font-weight: 600; }
 
 <script>
 // ========================================================
-// 1. Firebase 설정 (본인의 Firebase 웹 config 붙여넣기)
+// 1. Firebase 설정 (반드시 본인의 실제 Firebase Config 값으로 교체하세요)
 // ========================================================
 var firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBIi2WfYMEGSyNbUEhhwjIK5ffw3A5sOA0",
+  authDomain: "instatracker-b9ccb.firebaseapp.com",
+  projectId: "instatracker-b9ccb",
+  storageBucket: "instatracker-b9ccb.firebasestorage.app",
+  messagingSenderId: "397309844155",
+  appId: "1:397309844155:web:d473b8e364ea34ac9b279e",
+  measurementId: "G-B97GHW8EKL"
 };
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-var db = firebase.firestore();
 
 // ========================================================
 // 2. 우선순위 맵 & 컬러 정의 (막대그래프/달력에서 MMA 제외)
@@ -260,29 +256,28 @@ function getSeriesPriority(seriesName) {
   return 999;
 }
 
-// 상단 카드와 달력에서 표시할 공식 시리즈 목록 (MMA 제거됨)
+// 상단 카드와 달력에서 표시할 공식 시리즈 목록 (MMA 제외)
 var SERIES_MAP = {
-  melon: [
-    { name: '스포트라이트', bg: '#09cc1d', color: '#0a7f16' },/*초록*/
-    { name: '하이라이징', bg: '#a0fb64', color: '#5dcc14' },/*연두*/
-    { name: '뮤직웨이브', bg: '#facd5a', color: '#f9b75c' },/*노랑*/
-    { name: 'Data Lab', bg: '#fb92e9', color: '#eb56d2' },/*분홍*/
-    { name: 'Global-K Chart', bg: '#feecae', color: '#fcc602' },/*연노랑*/
-    { name: '아뭘듣', bg: '#b3813b', color: '#60431a' },/*갈색*/
-    { name: '오프라인', bg: '#ed5858', color: '#ab1616' },/*빨간색*/
-    { name: '기타', bg: '#f1f5f9', color: '#475569' }/*회색*/
-  ],
-  genie: [
-    { name: '스트림파티', bg: '#94edf8', color: '#07b3c9' },/*하늘*/
-    { name: '지니인사이드', bg: '#4e87f7', color: '#dbe5f9' },/*파랑*/
-    { name: '지니인사이드, 옥외광고', bg: '#2812b4', color: '#c8dff8' },/*진파랑*/
-    { name: '지니에 왔지니', bg: '#c28fef', color: '#5f1f98' },/*보라*/
-    { name: '러닝', bg: '#fdce8f', color: '#ea8b0e' },/*주황*/
-    { name: '기타', bg: '#f1f5f9', color: '#475569' }/*회색*/
-  ]
+  melon: [
+    { name: '스포트라이트', bg: '#09cc1d', color: '#0a7f16' },/*초록*/
+    { name: '하이라이징', bg: '#a0fb64', color: '#5dcc14' },/*연두*/
+    { name: '뮤직웨이브', bg: '#facd5a', color: '#f9b75c' },/*노랑*/
+    { name: 'Data Lab', bg: '#fb92e9', color: '#eb56d2' },/*분홍*/
+    { name: 'Global-K Chart', bg: '#feecae', color: '#fcc602' },/*연노랑*/
+    { name: '아뭘듣', bg: '#b3813b', color: '#60431a' },/*갈색*/
+    { name: '오프라인', bg: '#ed5858', color: '#ab1616' },/*빨간색*/
+    { name: '기타', bg: '#f1f5f9', color: '#475569' }/*회색*/
+  ],
+  genie: [
+    { name: '스트림파티', bg: '#94edf8', color: '#07b3c9' },/*하늘*/
+    { name: '지니인사이드', bg: '#4e87f7', color: '#dbe5f9' },/*파랑*/
+    { name: '지니인사이드, 옥외광고', bg: '#2812b4', color: '#c8dff8' },/*진파랑*/
+    { name: '지니에 왔지니', bg: '#c28fef', color: '#5f1f98' },/*보라*/
+    { name: '러닝', bg: '##fdce8f', color: '#ea8b0e' },/*주황*/
+    { name: '기타', bg: '#f1f5f9', color: '#475569' }/*회색*/
+  ]
 };
 
-// 하단 리스트에서 MMA 표시용 스타일 매핑
 var EXTRA_SERIES_STYLE = {
   'mma': { bg: '#fbcfe8', color: '#9d174d' }
 };
@@ -352,7 +347,6 @@ var EXTRA_SERIES_STYLE = {
     });
   }
 
-  // 상단 요약 카드: MMA 게시물은 카운트 및 막대에서 완전 제외
   function renderCards() {
     var html = '';
     visibleAccts().forEach(function (acct) {
@@ -381,7 +375,7 @@ var EXTRA_SERIES_STYLE = {
         var c = counts[s.name] || 0;
         return '<li class="bar-row">' +
           '<div class="bar-meta"><span style="font-weight:500;">' + esc(s.name) + '</span><span class="ct">' + c + '</span></div>' +
-          '<div class="track"><div class="fill" style="width:' + (c / max * 100) + '%;background:' + s.color + '"></div></div>' +
+          '<div class="track"><div class="fill" style="width:' + (c / max * 100) + '%;background:' + s.bg + '"></div></div>' +
         '</li>';
       }).join('');
 
@@ -396,13 +390,11 @@ var EXTRA_SERIES_STYLE = {
     $('cards').innerHTML = html;
   }
 
-  // 달력 그리드: MMA 게시물은 달력 칩 및 카운트에서 제외
   function renderCal() {
     if (state.view !== 'cal') { $('cal').innerHTML = ''; return; }
     var y = state.cy, m = state.cm, accts = visibleAccts(), by = {};
     state.posts.forEach(function (p) {
       var s = (p.series || '').trim().toLowerCase();
-      // MMA는 달력 칩에서 제외
       if (accts.indexOf(p.account) > -1 && s !== 'mma') {
         (by[p.date] = by[p.date] || []).push(p);
       }
@@ -464,7 +456,6 @@ var EXTRA_SERIES_STYLE = {
     '</li>';
   }
 
-  // 하단 상세 목록: MMA를 포함하여 모든 게시물을 온전히 노출
   function renderLog() {
     if (!state.loaded) {
       $('log').innerHTML = '<div class="empty">데이터를 동기화하는 중…</div>';
@@ -566,12 +557,28 @@ var EXTRA_SERIES_STYLE = {
     a.download = 'instagram_archive_' + todayStr() + '.csv'; a.click();
   });
 
-  // Firestore 실시간 동기화
-  db.collection('posts').orderBy('date', 'desc').limit(2000).onSnapshot(function (snap) {
-    state.posts = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
+  // 초기 렌더링 (데이터 수신 전 레이아웃 표시)
+  renderAll();
+
+  // Firebase 연결 처리
+  if (firebaseConfig && firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    var db = firebase.firestore();
+    db.collection('posts').orderBy('date', 'desc').limit(2000).onSnapshot(function (snap) {
+      state.posts = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
+      state.loaded = true;
+      renderAll();
+    }, function (err) {
+      console.error("Firestore 동기화 오류:", err);
+      state.loaded = true;
+      renderAll();
+    });
+  } else {
     state.loaded = true;
     renderAll();
-  });
+  }
 
 })();
 </script>
