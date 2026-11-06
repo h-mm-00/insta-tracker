@@ -82,16 +82,69 @@ def extract_owner_comments(item, target_username):
             if text:
                 owner_comments.append(text)
     return " ".join(owner_comments)
-
+    
 def extract_artist(full_text):
-    bracket = re.search(r'\[([^\]]+)\]', full_text)
-    if bracket:
-        return bracket.group(1).strip()
-    tags = re.findall(r'#([가-힣a-zA-Z0-9_]+)', full_text)
-    ignore_tags = {'지니뮤직', '멜론', 'geniemusic', 'melon', '릴스', '음악추천', 'kpop', '플리', '신보', '컴백'}
-    for tag in tags:
-        if tag.lower() not in ignore_tags:
+    if not full_text:
+        return ""
+
+    # 제외할 단어/태그 목록 (소문자 기준)
+    IGNORE_TERMS = {
+        'single', 'album', 'mini album', 'ep', 'ep album', '정규', '싱글', '미니앨범',
+        'ost', 'track', 'title', '신보', '컴백', '발매', '이벤트', '독점', '안내', '공지',
+        'mv', 'teaser', 'interview', 'live', '선공개', 'preview', '포토', '화보',
+        '지니뮤직', '멜론', 'geniemusic', 'melon', '릴스', '음악추천', 'kpop', '플리',
+        '스트림파티', '지니인사이드', '스포트라이트', '하이라이징', '뮤직웨이브', '아뭘듣',
+        'datalab', 'mma', 'mma2026', 'inside', 'only', 'with'
+    }
+
+    # 1. 문장 맨 첫머리가 해시태그 아티스트인 경우 (예: #RESCENE 의 4번째 미니 앨범...)
+    m_head_tag = re.search(r'^\s*#([A-Za-z0-9가-힣_]+)', full_text)
+    if m_head_tag:
+        tag = m_head_tag.group(1).strip()
+        if tag.lower() not in IGNORE_TERMS:
             return tag
+
+    # 2. "~의 (숫자번째/새/첫) 앨범" 또는 "~의 독점/스토리" 문형 감지
+    # 예: "#RESCENE 의 4번째 미니 앨범", "ALLDAY PROJECT의 The 2nd EP"
+    m_possessive = re.search(r'#?([A-Za-z0-9가-힣\s&_]+?)\s*의\s+(?:the|새|첫|신곡|신보|\d|독점|미니|정규)', full_text, re.IGNORECASE)
+    if m_possessive:
+        candidate = m_possessive.group(1).strip()
+        if candidate.lower() not in IGNORE_TERMS and len(candidate) <= 30:
+            return candidate
+
+    # 3. 본문 내 특수 영문 정규화 후 "with 아티스트" 패턴 (예: with RESCENE)
+    m_with = re.search(r'\bwith\s+([A-Za-z0-9가-힣]+)', full_text, re.IGNORECASE)
+    if m_with:
+        cand = m_with.group(1).strip()
+        if cand.lower() not in IGNORE_TERMS:
+            return cand
+
+    # 4. 해시태그 목록 중 우선 탐색 (지니인사이드, 이벤트 태그 등 제외)
+    tags = re.findall(r'#([가-힣a-zA-Z0-9_]+)', full_text)
+    for tag in tags:
+        t_low = tag.lower()
+        # INSIDE_RESCENE 같은 결합형 태그 처리
+        if t_low.startswith('inside_'):
+            return tag[7:].strip()
+        if t_low not in IGNORE_TERMS and not any(term in t_low for term in ['inside', 'genie', 'melon', 'pulse']):
+            return tag
+
+    # 5. "아티스트명 - 곡명" 형태
+    m_hyphen = re.search(r'([A-Za-z0-9가-힣\s&]+?)\s*-\s*[A-Za-z0-9가-힣\'"〈<]', full_text)
+    if m_hyphen:
+        candidate = m_hyphen.group(1).strip()
+        if '\n' not in candidate and candidate.lower() not in IGNORE_TERMS and 2 <= len(candidate) <= 25:
+            return candidate
+
+    # 6. 최후의 수단: 대괄호 [ ... ] (단, 앨범/곡명일 확률이 높으므로 뒤로 배치)
+    brackets = re.findall(r'\[([^\]]+)\]', full_text)
+    for b in brackets:
+        b_clean = b.strip().replace('#', '')
+        if '-' in b_clean:
+            b_clean = b_clean.split('-')[0].strip()
+        if b_clean.lower() not in IGNORE_TERMS and not any(term in b_clean.lower() for term in ['album', 'single', 'ep', 'ost', '발매', 'pulse', 'crash']):
+            return b_clean
+
     return ""
 
 def sync():
